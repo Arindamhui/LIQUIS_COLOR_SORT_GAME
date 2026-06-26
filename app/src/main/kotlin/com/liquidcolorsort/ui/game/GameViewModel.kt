@@ -41,6 +41,7 @@ class GameViewModel @Inject constructor(
     private val progressRepo: ProgressRepository,
     private val settingsRepo: SettingsRepository,
     private val adManager:    AdService,
+    private val analytics:    com.liquidcolorsort.util.AnalyticsManager,
     savedState: SavedStateHandle,
 ) : ViewModel() {
 
@@ -94,6 +95,7 @@ class GameViewModel @Inject constructor(
                     _uiState.value = GameUiState.Playing
                     // Unlock this level in DB (idempotent)
                     progressRepo.unlockLevel(levelId)
+                    analytics.logLevelStart(levelId)
                 }
         }
     }
@@ -202,11 +204,13 @@ class GameViewModel @Inject constructor(
 
     private fun handleWin(finalState: GameState) {
         _uiState.value = GameUiState.Won(moveCount = finalState.moveCount)
+        val optimal = _level.value?.optimalMoves ?: 0
+        analytics.logLevelComplete(levelId, finalState.moveCount, optimal)
         viewModelScope.launch {
             progressRepo.recordCompletion(
                 levelId      = levelId,
                 moveCount    = finalState.moveCount,
-                optimalMoves = _level.value?.optimalMoves ?: 0,
+                optimalMoves = optimal,
             )
             settingsRepo.incrementTotalMoves(finalState.moveCount.toLong())
         }

@@ -22,6 +22,11 @@ val releaseProps = Properties().apply {
     if (releasePropsFile.exists()) load(releasePropsFile.inputStream())
 }
 
+val admobAppId = releaseProps.getProperty("admobAppId", "ca-app-pub-3940256099942544~3347511713")
+val admobBannerId = releaseProps.getProperty("admobBannerId", "ca-app-pub-3940256099942544/6300978111")
+val admobInterstitialId = releaseProps.getProperty("admobInterstitialId", "ca-app-pub-3940256099942544/1033173712")
+val admobRewardedId = releaseProps.getProperty("admobRewardedId", "ca-app-pub-3940256099942544/5224354917")
+
 android {
     namespace  = "com.liquidcolorsort"
     compileSdk = 35
@@ -36,7 +41,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         // AdMob App ID (test value — replace before publishing)
-        manifestPlaceholders["admobAppId"] = "ca-app-pub-3940256099942544~3347511713"
+        manifestPlaceholders["admobAppId"] = admobAppId
     }
 
     signingConfigs {
@@ -71,10 +76,9 @@ android {
                 "proguard-rules.pro"
             )
 
-            // TODO: Replace placeholder IDs with real AdMob ad-unit IDs before upload
-            buildConfigField("String", "ADMOB_BANNER_ID",       "\"ca-app-pub-REPLACE_ME/REPLACE_ME\"")
-            buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"ca-app-pub-REPLACE_ME/REPLACE_ME\"")
-            buildConfigField("String", "ADMOB_REWARDED_ID",     "\"ca-app-pub-REPLACE_ME/REPLACE_ME\"")
+            buildConfigField("String", "ADMOB_BANNER_ID",       "\"$admobBannerId\"")
+            buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"$admobInterstitialId\"")
+            buildConfigField("String", "ADMOB_REWARDED_ID",     "\"$admobRewardedId\"")
             buildConfigField("Boolean", "ADS_ENABLED", "true")
         }
     }

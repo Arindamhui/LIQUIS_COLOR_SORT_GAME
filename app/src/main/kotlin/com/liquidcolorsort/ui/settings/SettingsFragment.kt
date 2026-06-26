@@ -13,9 +13,13 @@ import androidx.navigation.fragment.findNavController
 import com.liquidcolorsort.databinding.FragmentSettingsBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
+
+    @Inject
+    lateinit var analytics: com.liquidcolorsort.util.AnalyticsManager
 
     private val viewModel: SettingsViewModel by viewModels()
     private var _binding: FragmentSettingsBinding? = null
@@ -35,12 +39,15 @@ class SettingsFragment : Fragment() {
 
         binding.switchSound.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setSoundEnabled(isChecked)
+            analytics.logSettingChanged("sound", isChecked)
         }
         binding.switchMusic.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setMusicEnabled(isChecked)
+            analytics.logSettingChanged("music", isChecked)
         }
         binding.switchVibration.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setVibrationEnabled(isChecked)
+            analytics.logSettingChanged("vibration", isChecked)
         }
 
         binding.btnRemoveAds.setOnClickListener {

@@ -22,6 +22,7 @@ import javax.inject.Singleton
 @Singleton
 class AdManager @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val analytics: com.liquidcolorsort.util.AnalyticsManager,
 ) : AdService {
 
     companion object {
@@ -97,6 +98,7 @@ class AdManager @Inject constructor(
         container.removeAllViews()
         container.addView(adView)
         adView.loadAd(buildRequest())
+        analytics.logAdImpression("banner")
     }
 
     // ── Interstitial ───────────────────────────────────────────────────────
@@ -155,6 +157,7 @@ class AdManager @Inject constructor(
             }
         }
         ad.show(activity)
+        analytics.logAdImpression("interstitial")
     }
 
     // ── Rewarded ───────────────────────────────────────────────────────────
@@ -199,7 +202,10 @@ class AdManager @Inject constructor(
                 preloadRewarded()
             }
         }
-        ad.show(activity) { onRewarded() }
+        ad.show(activity) {
+            analytics.logAdImpression("rewarded")
+            onRewarded()
+        }
     }
 
     override val isRewardedReady: Boolean get() = rewardedAd != null

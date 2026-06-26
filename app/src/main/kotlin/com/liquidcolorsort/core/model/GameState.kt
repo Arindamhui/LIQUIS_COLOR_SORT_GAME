@@ -20,6 +20,7 @@ data class GameState(
     val tubes: List<Tube>,
     val moveCount: Int = 0,
     val history: List<List<Tube>> = emptyList(),
+    val redoHistory: List<List<Tube>> = emptyList(),
     val selectedTube: Int? = null,
 ) {
     // ── Derived state ─────────────────────────────────────────────────────
@@ -48,6 +49,10 @@ data class GameState(
     /** `true` when there is at least one state to undo. */
     val canUndo: Boolean
         get() = history.isNotEmpty()
+
+    /** `true` when there is at least one state to redo. */
+    val canRedo: Boolean
+        get() = redoHistory.isNotEmpty()
 
     /** Number of distinct (non-empty) colors currently in play. */
     val activeColorCount: Int

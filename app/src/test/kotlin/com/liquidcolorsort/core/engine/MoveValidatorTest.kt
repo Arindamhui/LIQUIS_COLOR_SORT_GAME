@@ -203,6 +203,55 @@ class MoveValidatorTest {
         }
     }
 
+    // ── redo ───────────────────────────────────────────────────────────────
+
+    @Nested
+    inner class RedoTests {
+
+        @Test
+        fun `redo with empty redoHistory returns null`() {
+            val state = stateOf(intArrayOf(1, 2), intArrayOf(2))
+            assertNull(MoveValidator.redo(state))
+        }
+
+        @Test
+        fun `redo restores next tube configuration after undo`() {
+            val state  = stateOf(intArrayOf(1, 2), intArrayOf(2))
+            val poured = MoveValidator.pour(state, 0, 1)
+            val undone = MoveValidator.undo(poured)!!
+            val redone = MoveValidator.redo(undone)!!
+
+            assertEquals(poured.tubes, redone.tubes)
+        }
+
+        @Test
+        fun `redo increments moveCount`() {
+            val state  = stateOf(intArrayOf(1, 2), intArrayOf(2))
+            val poured = MoveValidator.pour(state, 0, 1)
+            val undone = MoveValidator.undo(poured)!!
+            val redone = MoveValidator.redo(undone)!!
+
+            assertEquals(1, redone.moveCount)
+        }
+
+        @Test
+        fun `new move clears redo history`() {
+            val state  = stateOf(intArrayOf(1, 2), intArrayOf(2), intArrayOf())
+            val poured1 = MoveValidator.pour(state, 0, 1) // pour 2 to tube1
+            val undone = MoveValidator.undo(poured1)!!
+            
+            // At this point we can redo
+            assertTrue(undone.canRedo)
+            
+            // Make a different move instead
+            val poured2 = MoveValidator.pour(undone, 0, 2) // pour 2 to tube2
+            
+            // Redo history should now be cleared
+            assertFalse(poured2.canRedo)
+            assertNull(MoveValidator.redo(poured2))
+        }
+    }
+
     // ── handleTap ──────────────────────────────────────────────────────────
 
     @Nested

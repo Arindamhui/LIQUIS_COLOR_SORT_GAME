@@ -65,6 +65,7 @@ object MoveValidator {
             tubes        = newTubes,
             moveCount    = state.moveCount + 1,
             history      = state.history + listOf(state.tubes),
+            redoHistory  = emptyList(),
             selectedTube = null,
         )
     }
@@ -81,6 +82,24 @@ object MoveValidator {
             tubes        = previous,
             moveCount    = (state.moveCount - 1).coerceAtLeast(0),
             history      = state.history.dropLast(1),
+            redoHistory  = state.redoHistory + listOf(state.tubes),
+            selectedTube = null,
+        )
+    }
+
+    /**
+     * Reapplies the most recently undone move.
+     *
+     * Returns null if there is nothing to redo.
+     */
+    fun redo(state: GameState): GameState? {
+        if (!state.canRedo) return null
+        val nextTubes = state.redoHistory.last()
+        return state.copy(
+            tubes        = nextTubes,
+            moveCount    = state.moveCount + 1,
+            history      = state.history + listOf(state.tubes),
+            redoHistory  = state.redoHistory.dropLast(1),
             selectedTube = null,
         )
     }

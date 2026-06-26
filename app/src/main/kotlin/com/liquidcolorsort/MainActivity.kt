@@ -19,6 +19,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    @javax.inject.Inject
+    lateinit var adManager: com.liquidcolorsort.ads.AdService
+
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +36,11 @@ class MainActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        // UMP / GDPR Consent check
+        adManager.checkConsentAndInit(this) {
+            // Initialisation complete
         }
     }
 }

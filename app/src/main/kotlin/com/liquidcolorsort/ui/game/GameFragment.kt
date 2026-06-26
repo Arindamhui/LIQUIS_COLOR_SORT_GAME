@@ -20,7 +20,7 @@ import com.liquidcolorsort.core.model.Tube
 import com.liquidcolorsort.databinding.FragmentGameBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import com.liquidcolorsort.ads.AdManager
+import com.liquidcolorsort.ads.AdService
 import javax.inject.Inject
 import android.view.HapticFeedbackConstants
 import com.liquidcolorsort.audio.SoundManager
@@ -44,7 +44,7 @@ import com.liquidcolorsort.audio.SoundManager
 class GameFragment : Fragment() {
 
     @Inject
-    lateinit var adManager: AdManager
+    lateinit var adManager: AdService
 
     @Inject
     lateinit var soundManager: SoundManager
@@ -309,7 +309,7 @@ class GameFragment : Fragment() {
         tvWinMoves.text = getString(R.string.win_moves, moveCount)
 
         btnNextLevel.setOnClickListener {
-            adManager.onLevelComplete(requireActivity()) {
+            adManager.onLevelComplete(requireActivity(), viewModel.levelId) {
                 val nextId = viewModel.levelId + 1
                 val action = GameFragmentDirections.actionGameSelf(levelId = nextId)
                 findNavController().navigate(action)

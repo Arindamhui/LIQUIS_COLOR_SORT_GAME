@@ -8,45 +8,88 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.google.android.ump.ConsentRequestParameters
+import com.google.android.ump.UserMessagingPlatform
 import com.liquidcolorsort.BuildConfig
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Centralised manager for all AdMob ad units.
- *
- * ### Ad strategy
- * - **Banner**: shown on Home and LevelSelect screens only.
- * - **Interstitial**: shown every [INTERSTITIAL_FREQUENCY] level completions.
- * - **Rewarded**: shown on user-initiated hint requests.
- *
- * All ad loading is non-blocking. Callbacks are delivered on the main thread.
- *
- * ### Ad unit IDs
- * Test IDs (safe to commit) are used in `debug` builds via [BuildConfig].
- * Real IDs must be set in `app/build.gradle.kts` for the `release` build type.
+ * Concrete implementation of [AdService] coordinating Google AdMob ads and GDPR/UMP consent flow.
+ * Frequency capping and retention-protection policies are centralized here.
  */
 @Singleton
 class AdManager @Inject constructor(
     @ApplicationContext private val context: Context,
-) {
+) : AdService {
+
     companion object {
         /** Show an interstitial after every N level completions. */
         const val INTERSTITIAL_FREQUENCY = 3
+        
+        /** Levels before which NO interstitials are displayed to protect D1 user retention. */
+        const val RETENTION_SAFE_LEVEL_THRESHOLD = 5
     }
 
     private var interstitialAd: InterstitialAd? = null
     private var rewardedAd: RewardedAd? = null
     private var completionCount = 0
+    private var isInitialized = false
+
+    // ── Consent & Initialization ───────────────────────────────────────────
+
+    override fun checkConsentAndInit(activity: Activity, onComplete: () -> Unit) {
+        val params = ConsentRequestParameters.Builder()
+            .setTagForUnderAgeOfConsent(false)
+            .build()
+
+        val consentInformation = UserMessagingPlatform.getConsentInformation(activity)
+        consentInformation.requestConsentInfoUpdate(
+            activity,
+            params,
+            {
+                UserMessagingPlatform.loadAndShowConsentFormIfRequired(activity) { formError ->
+                    if (consentInformation.canRequestAds()) {
+                        initAdMob()
+                    }
+                    onComplete()
+                }
+            },
+            { requestConsentError ->
+                // Fallback: initialisation attempt on network or configuration issues
+                if (consentInformation.canRequestAds()) {
+                    initAdMob()
+                }
+                onComplete()
+            }
+        )
+    }
+
+    private fun initAdMob() {
+        if (isInitialized) return
+        isInitialized = true
+        
+        MobileAds.initialize(context) {
+            preloadInterstitial()
+            preloadRewarded()
+        }
+
+        if (BuildConfig.DEBUG) {
+            val config = RequestConfiguration.Builder()
+                .setTestDeviceIds(listOf("EMULATOR"))
+                .build()
+            MobileAds.setRequestConfiguration(config)
+        }
+    }
 
     // ── Banner ─────────────────────────────────────────────────────────────
 
-    /**
-     * Creates and loads a banner ad into [container].
-     * Call this in [androidx.fragment.app.Fragment.onViewCreated].
-     */
-    fun loadBanner(container: ViewGroup) {
+    override fun loadBanner(container: ViewGroup) {
+        // If UMP consent is not ready, do not load ads to avoid compliance issues
+        val consentInformation = UserMessagingPlatform.getConsentInformation(context)
+        if (!consentInformation.canRequestAds()) return
+
         val adView = AdView(context).apply {
             adUnitId = BuildConfig.ADMOB_BANNER_ID
             setAdSize(AdSize.BANNER)
@@ -58,11 +101,10 @@ class AdManager @Inject constructor(
 
     // ── Interstitial ───────────────────────────────────────────────────────
 
-    /**
-     * Preloads the interstitial ad. Should be called when the app starts
-     * and again after the ad is dismissed.
-     */
-    fun preloadInterstitial() {
+    override fun preloadInterstitial() {
+        val consentInformation = UserMessagingPlatform.getConsentInformation(context)
+        if (!consentInformation.canRequestAds()) return
+
         InterstitialAd.load(
             context,
             BuildConfig.ADMOB_INTERSTITIAL_ID,
@@ -78,14 +120,13 @@ class AdManager @Inject constructor(
         )
     }
 
-    /**
-     * Called each time the player completes a level. Shows an interstitial
-     * every [INTERSTITIAL_FREQUENCY] completions if one is ready.
-     *
-     * @param activity     Foreground activity required by AdMob.
-     * @param onDismissed  Called after the ad closes (or immediately if no ad).
-     */
-    fun onLevelComplete(activity: Activity, onDismissed: () -> Unit) {
+    override fun onLevelComplete(activity: Activity, completedLevelId: Int, onDismissed: () -> Unit) {
+        // Protect D1 retention: Avoid interstitials during the first levels
+        if (completedLevelId < RETENTION_SAFE_LEVEL_THRESHOLD) {
+            onDismissed()
+            return
+        }
+
         completionCount++
         if (completionCount % INTERSTITIAL_FREQUENCY != 0) {
             onDismissed()
@@ -118,11 +159,10 @@ class AdManager @Inject constructor(
 
     // ── Rewarded ───────────────────────────────────────────────────────────
 
-    /**
-     * Preloads the rewarded ad. Should be called proactively so it is ready
-     * when the user taps the hint button.
-     */
-    fun preloadRewarded() {
+    override fun preloadRewarded() {
+        val consentInformation = UserMessagingPlatform.getConsentInformation(context)
+        if (!consentInformation.canRequestAds()) return
+
         RewardedAd.load(
             context,
             BuildConfig.ADMOB_REWARDED_ID,
@@ -138,22 +178,10 @@ class AdManager @Inject constructor(
         )
     }
 
-    /**
-     * Shows the rewarded ad. The [onRewarded] callback fires only if the
-     * user watches the full ad and earns the reward.
-     *
-     * @param activity    Foreground activity required by AdMob.
-     * @param onRewarded  Called with the reward item when the user earns it.
-     * @param onDismissed Called when the ad is dismissed (regardless of reward).
-     */
-    fun showRewarded(
-        activity: Activity,
-        onRewarded: () -> Unit,
-        onDismissed: () -> Unit,
-    ) {
+    override fun showRewarded(activity: Activity, onRewarded: () -> Unit, onDismissed: () -> Unit) {
         val ad = rewardedAd
         if (ad == null) {
-            // Ad not ready — grant the hint anyway rather than blocking UX
+            // Ad not ready: grant reward immediately rather than hurting gameplay UX
             onRewarded()
             onDismissed()
             preloadRewarded()
@@ -174,8 +202,7 @@ class AdManager @Inject constructor(
         ad.show(activity) { onRewarded() }
     }
 
-    /** Returns `true` if a rewarded ad is loaded and ready to display. */
-    val isRewardedReady: Boolean get() = rewardedAd != null
+    override val isRewardedReady: Boolean get() = rewardedAd != null
 
     // ── Helpers ────────────────────────────────────────────────────────────
 

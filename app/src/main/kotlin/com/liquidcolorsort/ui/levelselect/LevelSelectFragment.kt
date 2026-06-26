@@ -15,7 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.liquidcolorsort.R
-import com.liquidcolorsort.ads.AdManager
+import com.liquidcolorsort.ads.AdService
 import com.liquidcolorsort.databinding.FragmentLevelSelectBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -28,7 +28,7 @@ class LevelSelectFragment : Fragment() {
     private var _binding: FragmentLevelSelectBinding? = null
     private val binding get() = _binding!!
 
-    @Inject lateinit var adManager: AdManager
+    @Inject lateinit var adManager: AdService
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,

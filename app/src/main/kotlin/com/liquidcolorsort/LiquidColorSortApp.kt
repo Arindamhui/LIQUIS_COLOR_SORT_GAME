@@ -37,19 +37,5 @@ class LiquidColorSortApp : Application() {
             defaultHandler?.uncaughtException(thread, throwable)
         }
 
-        // Initialise AdMob on a background thread to avoid jank on the
-        // first frame. The SDK queues ad requests until init completes.
-        applicationScope.launch {
-            MobileAds.initialize(this@LiquidColorSortApp)
-        }
-
-        // In debug builds, add the test-device fingerprint so that test
-        // ad requests are routed to Google's test ad servers.
-        if (BuildConfig.DEBUG) {
-            val config = RequestConfiguration.Builder()
-                .setTestDeviceIds(listOf("EMULATOR"))
-                .build()
-            MobileAds.setRequestConfiguration(config)
-        }
     }
 }

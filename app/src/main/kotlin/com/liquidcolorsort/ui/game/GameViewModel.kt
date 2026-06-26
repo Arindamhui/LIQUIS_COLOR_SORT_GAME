@@ -3,7 +3,7 @@ package com.liquidcolorsort.ui.game
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.liquidcolorsort.ads.AdManager
+import com.liquidcolorsort.ads.AdService
 import com.liquidcolorsort.core.engine.MoveValidator
 import com.liquidcolorsort.core.engine.SolverHint
 import com.liquidcolorsort.core.level.Level
@@ -40,7 +40,7 @@ class GameViewModel @Inject constructor(
     private val levelRepo:    LevelRepository,
     private val progressRepo: ProgressRepository,
     private val settingsRepo: SettingsRepository,
-    private val adManager:    AdManager,
+    private val adManager:    AdService,
     savedState: SavedStateHandle,
 ) : ViewModel() {
 

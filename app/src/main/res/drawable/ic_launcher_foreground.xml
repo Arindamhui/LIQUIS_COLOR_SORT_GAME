@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Launcher foreground icon — stylized tube with 4 colored liquid segments.
+  All coordinates are unitless viewport coordinates (108 x 108).
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Bottom liquid segment — Red -->
+    <path
+        android:fillColor="#FFE53935"
+        android:pathData="M37,74 L71,74 L71,88 Q71,94 65,94 L43,94 Q37,94 37,88 Z"/>
+
+    <!-- Second segment — Blue -->
+    <path
+        android:fillColor="#FF1E88E5"
+        android:pathData="M37,54 L71,54 L71,74 L37,74 Z"/>
+
+    <!-- Third segment — Green -->
+    <path
+        android:fillColor="#FF43A047"
+        android:pathData="M37,34 L71,34 L71,54 L37,54 Z"/>
+
+    <!-- Top segment — Yellow -->
+    <path
+        android:fillColor="#FFFDD835"
+        android:pathData="M43,14 L65,14 Q71,14 71,20 L71,34 L37,34 L37,20 Q37,14 43,14 Z"/>
+
+    <!-- Tube outline (glass) -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#DDFFFFFF"
+        android:strokeWidth="3"
+        android:pathData="M43,14 L65,14 Q71,14 71,20 L71,88 Q71,94 65,94 L43,94 Q37,94 37,88 L37,20 Q37,14 43,14 Z"/>
+
+    <!-- Shine overlay (left edge highlight) -->
+    <path
+        android:fillColor="#22FFFFFF"
+        android:pathData="M37,20 Q37,14 43,14 L50,14 L50,94 L43,94 Q37,94 37,88 Z"/>
+
+</vector>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Liquid Color Sort</string>
+    <string name="home_subtitle">Sort the colors. Find your flow.</string>
+    <string name="home_play">Play</string>
+    <string name="home_settings">Settings</string>
+    <string name="home_progress">%d levels completed</string>
+
+    <string name="level_select_title">Select Level</string>
+    <string name="level_title">Level %d</string>
+    <string name="moves_count">Moves: %d</string>
+    <string name="tube_description">Tube %d</string>
+
+    <string name="undo">Undo</string>
+    <string name="hint">Hint 💡</string>
+    <string name="restart">Restart</string>
+    <string name="back">Back</string>
+    <string name="level_select">Level Select</string>
+
+    <string name="win_title">🎉 Solved!</string>
+    <string name="win_moves">Completed in %d moves</string>
+    <string name="next_level">Next Level →</string>
+    <string name="replay">Replay</string>
+
+    <string name="deadlock_title">Stuck?</string>
+    <string name="deadlock_message">No moves available.\nUndo a few steps or restart the level.</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="sound_effects">Sound Effects</string>
+    <string name="remove_ads">Remove Ads</string>
+    <string name="version_info">v1.0.0 · Made with ❤</string>
+
+    <!-- Accessibility -->
+    <string name="a11y_tube_empty">Empty tube %1$d</string>
+    <string name="a11y_tube_colors">Tube %1$d contains: %2$s</string>
+</resources>

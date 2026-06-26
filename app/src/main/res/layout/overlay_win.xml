@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#CC000000"
+    android:padding="32dp">
+
+    <TextView
+        android:id="@+id/tv_win_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/win_title"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFD700"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/tv_win_moves"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="#FFFFFFFF"
+        android:layout_marginBottom="32dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_next_level"
+        android:layout_width="200dp"
+        android:layout_height="52dp"
+        android:text="@string/next_level"
+        android:textColor="#FF0D1B2A"
+        app:backgroundTint="#FFFFD700"
+        app:cornerRadius="26dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_marginBottom="12dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_replay_level"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
+        android:text="@string/replay"
+        android:textColor="#FFFFFFFF"
+        app:strokeColor="#AAFFFFFF"
+        app:cornerRadius="24dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_marginBottom="12dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_win_back"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/level_select"
+        android:textColor="#AAFFFFFF"
+        xmlns:app="http://schemas.android.com/apk/res-auto" />
+
+</LinearLayout>

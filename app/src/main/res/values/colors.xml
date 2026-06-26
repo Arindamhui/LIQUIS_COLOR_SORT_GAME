@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Background colors -->
+    <color name="bg_dark">#FF0D1B2A</color>
+    <color name="bg_surface">#FF1A2D40</color>
+    <color name="bg_card">#FF1E3548</color>
+
+    <!-- Brand / accent -->
+    <color name="gold">#FFFFD700</color>
+    <color name="teal_hint">#FF00FFAA</color>
+    <color name="white_60">#99FFFFFF</color>
+
+    <!--
+      Liquid colors (match TubeView.colorPalette array).
+      Used for accessibility labels and any non-Canvas rendering.
+    -->
+    <color name="liquid_1">#FFE53935</color>  <!-- Red -->
+    <color name="liquid_2">#FF1E88E5</color>  <!-- Blue -->
+    <color name="liquid_3">#FF43A047</color>  <!-- Green -->
+    <color name="liquid_4">#FFFDD835</color>  <!-- Yellow -->
+    <color name="liquid_5">#FFFF6D00</color>  <!-- Orange -->
+    <color name="liquid_6">#FF8E24AA</color>  <!-- Purple -->
+    <color name="liquid_7">#FF00ACC1</color>  <!-- Cyan -->
+    <color name="liquid_8">#FFEC407A</color>  <!-- Pink -->
+    <color name="liquid_9">#FF6D4C41</color>  <!-- Brown -->
+    <color name="liquid_10">#FF78909C</color> <!-- Grey -->
+    <color name="liquid_11">#FF76FF03</color> <!-- Lime -->
+    <color name="liquid_12">#FFFF80AB</color> <!-- Rose -->
+</resources>

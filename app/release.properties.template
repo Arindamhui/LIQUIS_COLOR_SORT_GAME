@@ -1,0 +1,8 @@
+# Release Signing Configurations Template
+# Save a copy of this file as 'app/release.properties' (which is git-ignored)
+# and populate the values below.
+
+storeFile=../keystore/release.jks
+storePassword=placeholder_keystore_password
+keyAlias=placeholder_key_alias
+keyPassword=placeholder_key_password

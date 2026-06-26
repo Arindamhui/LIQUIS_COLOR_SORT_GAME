@@ -104,23 +104,49 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="0dp"
             android:layout_height="48dp"
-            android:layout_weight="1"
+            android:layout_weight="1.1"
             android:text="@string/undo"
             android:textColor="#FFFFFFFF"
             app:strokeColor="#AAFFFFFF"
             app:cornerRadius="24dp"
-            android:layout_marginEnd="8dp" />
+            android:layout_marginEnd="4dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_redo"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1.1"
+            android:text="@string/redo"
+            android:textColor="#FFFFFFFF"
+            app:strokeColor="#AAFFFFFF"
+            app:cornerRadius="24dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_add_tube"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1.4"
+            android:text="@string/add_tube"
+            android:textColor="#FFFFFFFF"
+            app:strokeColor="#AAFFFFFF"
+            app:cornerRadius="24dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_hint"
             android:layout_width="0dp"
             android:layout_height="48dp"
-            android:layout_weight="1"
+            android:layout_weight="1.2"
             android:text="@string/hint"
             android:textColor="#FF0D1B2A"
             app:backgroundTint="#FFFFD700"
             app:cornerRadius="24dp"
-            android:layout_marginStart="8dp" />
+            android:layout_marginStart="4dp" />
 
     </LinearLayout>
 

@@ -78,12 +78,27 @@ object MoveValidator {
     fun undo(state: GameState): GameState? {
         if (!state.canUndo) return null
         val previous = state.history.last()
+        val isRemovingTube = previous.size < state.tubes.size
+        
+        val revertedMoveCount = if (isRemovingTube) {
+            state.moveCount
+        } else {
+            (state.moveCount - 1).coerceAtLeast(0)
+        }
+        
+        val revertedExtraTubesAdded = if (isRemovingTube) {
+            (state.extraTubesAdded - 1).coerceAtLeast(0)
+        } else {
+            state.extraTubesAdded
+        }
+
         return state.copy(
-            tubes        = previous,
-            moveCount    = (state.moveCount - 1).coerceAtLeast(0),
-            history      = state.history.dropLast(1),
-            redoHistory  = state.redoHistory + listOf(state.tubes),
-            selectedTube = null,
+            tubes            = previous,
+            moveCount        = revertedMoveCount,
+            history          = state.history.dropLast(1),
+            redoHistory      = state.redoHistory + listOf(state.tubes),
+            selectedTube     = null,
+            extraTubesAdded  = revertedExtraTubesAdded,
         )
     }
 
@@ -95,12 +110,27 @@ object MoveValidator {
     fun redo(state: GameState): GameState? {
         if (!state.canRedo) return null
         val nextTubes = state.redoHistory.last()
+        val isAddingTube = nextTubes.size > state.tubes.size
+        
+        val updatedMoveCount = if (isAddingTube) {
+            state.moveCount
+        } else {
+            state.moveCount + 1
+        }
+        
+        val updatedExtraTubesAdded = if (isAddingTube) {
+            state.extraTubesAdded + 1
+        } else {
+            state.extraTubesAdded
+        }
+
         return state.copy(
-            tubes        = nextTubes,
-            moveCount    = state.moveCount + 1,
-            history      = state.history + listOf(state.tubes),
-            redoHistory  = state.redoHistory.dropLast(1),
-            selectedTube = null,
+            tubes            = nextTubes,
+            moveCount        = updatedMoveCount,
+            history          = state.history + listOf(state.tubes),
+            redoHistory      = state.redoHistory.dropLast(1),
+            selectedTube     = null,
+            extraTubesAdded  = updatedExtraTubesAdded,
         )
     }
 
@@ -140,6 +170,23 @@ object MoveValidator {
                 else state.copy(selectedTube = tubeIdx)
             }
         }
+    }
+
+    /**
+     * Appends an extra empty tube to the level and returns the new [GameState].
+     * Pushes the previous configuration onto the history stack to support undo.
+     */
+    fun addExtraTube(state: GameState): GameState {
+        if (!state.canAddExtraTube) return state
+        val capacity = state.tubes.firstOrNull()?.capacity ?: Tube.DEFAULT_CAPACITY
+        val newTube  = Tube(capacity = capacity)
+        return state.copy(
+            tubes            = state.tubes + newTube,
+            history          = state.history + listOf(state.tubes),
+            redoHistory      = emptyList(),
+            selectedTube     = null,
+            extraTubesAdded  = state.extraTubesAdded + 1,
+        )
     }
 
     // ── Private helpers ───────────────────────────────────────────────────

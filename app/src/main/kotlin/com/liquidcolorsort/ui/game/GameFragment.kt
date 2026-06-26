@@ -49,6 +49,9 @@ class GameFragment : Fragment() {
     @Inject
     lateinit var soundManager: SoundManager
 
+    @Inject
+    lateinit var networkMonitor: com.liquidcolorsort.util.NetworkMonitor
+
     private val viewModel: GameViewModel by viewModels()
     private var _binding: FragmentGameBinding? = null
     private val binding get() = _binding!!
@@ -103,6 +106,8 @@ class GameFragment : Fragment() {
 
     private fun setupButtonListeners() {
         binding.btnUndo.setOnClickListener { viewModel.onUndoTapped() }
+        binding.btnRedo.setOnClickListener { viewModel.onRedoTapped() }
+        binding.btnAddTube.setOnClickListener { viewModel.onAddTubeTapped() }
         binding.btnHint.setOnClickListener { onHintRequested() }
         binding.btnRestart.setOnClickListener { viewModel.onRestartTapped() }
         binding.btnBack.setOnClickListener { findNavController().popBackStack() }
@@ -117,6 +122,13 @@ class GameFragment : Fragment() {
                 launch { viewModel.gameState.collect { it?.let(::onGameStateChanged) } }
                 launch { viewModel.hint.collect(::onHintChanged) }
                 launch { viewModel.soundEnabled.collect { soundManager.setSoundEnabled(it) } }
+                launch {
+                    networkMonitor.isOnline.collect { isOnline ->
+                        if (!isOnline) {
+                            showNoInternetDialog()
+                        }
+                    }
+                }
                 launch {
                     viewModel.level.collect { level ->
                         level?.let {
@@ -210,6 +222,8 @@ class GameFragment : Fragment() {
 
         binding.tvMoveCount.text = getString(R.string.moves_count, state.moveCount)
         binding.btnUndo.isEnabled = state.canUndo
+        binding.btnRedo.isEnabled = state.canRedo
+        binding.btnAddTube.isEnabled = state.canAddExtraTube
 
         previousTubes = newTubes
         previousGameState = state
@@ -332,6 +346,14 @@ class GameFragment : Fragment() {
 
     private fun showError(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    }
+
+    private fun showNoInternetDialog() {
+        val existing = childFragmentManager.findFragmentByTag("NoInternetDialog")
+        if (existing == null) {
+            com.liquidcolorsort.ui.dialog.NoInternetDialogFragment()
+                .show(childFragmentManager, "NoInternetDialog")
+        }
     }
 
     override fun onDestroyView() {

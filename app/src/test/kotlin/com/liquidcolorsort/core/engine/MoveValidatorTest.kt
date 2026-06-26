@@ -343,6 +343,43 @@ class MoveValidatorTest {
         }
     }
 
+    // ── addExtraTube ───────────────────────────────────────────────────────
+
+    @Nested
+    inner class AddExtraTubeTests {
+
+        @Test
+        fun `addExtraTube adds a new empty tube`() {
+            val state = stateOf(intArrayOf(1, 2), intArrayOf(2))
+            val result = MoveValidator.addExtraTube(state)
+
+            assertEquals(3, result.tubes.size)
+            assertTrue(result.tubes.last().isEmpty)
+            assertEquals(1, result.extraTubesAdded)
+        }
+
+        @Test
+        fun `addExtraTube is capped at 1 extra tube`() {
+            val state = stateOf(intArrayOf(1, 2), intArrayOf(2))
+            val result1 = MoveValidator.addExtraTube(state)
+            val result2 = MoveValidator.addExtraTube(result1)
+
+            // Second call should be a no-op
+            assertEquals(3, result2.tubes.size)
+            assertEquals(1, result2.extraTubesAdded)
+        }
+
+        @Test
+        fun `undo removes added extra tube`() {
+            val state = stateOf(intArrayOf(1, 2), intArrayOf(2))
+            val stateWithTube = MoveValidator.addExtraTube(state)
+            val undone = MoveValidator.undo(stateWithTube)!!
+
+            assertEquals(2, undone.tubes.size)
+            assertEquals(0, undone.extraTubesAdded)
+        }
+    }
+
     // ── Parameterized canPour edge cases ───────────────────────────────────
 
     @ParameterizedTest(name = "from=[{0}] to=[{1}] → canPour={2}")

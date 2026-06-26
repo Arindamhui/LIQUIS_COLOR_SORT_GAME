@@ -140,6 +140,32 @@ class GameViewModel @Inject constructor(
         }
     }
 
+    fun onRedoTapped() {
+        if (_isAnimating.value) return
+        val current = _gameState.value ?: return
+        val next = MoveValidator.redo(current)
+        if (next != null) {
+            _gameState.value = next
+            _hint.value = null
+            if (_uiState.value is GameUiState.Deadlocked) {
+                _uiState.value = GameUiState.Playing
+            }
+        }
+    }
+
+    fun onAddTubeTapped() {
+        if (_isAnimating.value) return
+        val current = _gameState.value ?: return
+        val next = MoveValidator.addExtraTube(current)
+        if (next !== current) {
+            _gameState.value = next
+            _hint.value = null
+            if (_uiState.value is GameUiState.Deadlocked) {
+                _uiState.value = GameUiState.Playing
+            }
+        }
+    }
+
     /**
      * Requests a hint. The [GameFragment] is responsible for calling
      * [AdManager.showRewarded] and then invoking [grantHint] after the

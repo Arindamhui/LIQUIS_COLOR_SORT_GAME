@@ -33,4 +33,11 @@
     <!-- Accessibility -->
     <string name="a11y_tube_empty">Empty tube %1$d</string>
     <string name="a11y_tube_colors">Tube %1$d contains: %2$s</string>
+
+    <!-- Assist features -->
+    <string name="redo">Redo</string>
+    <string name="add_tube">+ Tube</string>
+    <string name="no_internet_title">No Internet Connection</string>
+    <string name="no_internet_message">Please check your network settings. An internet connection is required for ads and hints.</string>
+    <string name="ok">OK</string>
 </resources>

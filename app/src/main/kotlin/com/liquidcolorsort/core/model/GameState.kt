@@ -22,6 +22,7 @@ data class GameState(
     val history: List<List<Tube>> = emptyList(),
     val redoHistory: List<List<Tube>> = emptyList(),
     val selectedTube: Int? = null,
+    val extraTubesAdded: Int = 0,
 ) {
     // ── Derived state ─────────────────────────────────────────────────────
 
@@ -53,6 +54,10 @@ data class GameState(
     /** `true` when there is at least one state to redo. */
     val canRedo: Boolean
         get() = redoHistory.isNotEmpty()
+
+    /** `true` when an extra empty tube can still be added to the level. */
+    val canAddExtraTube: Boolean
+        get() = extraTubesAdded < 1
 
     /** Number of distinct (non-empty) colors currently in play. */
     val activeColorCount: Int

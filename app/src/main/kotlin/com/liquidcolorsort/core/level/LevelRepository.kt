@@ -41,12 +41,12 @@ class LevelRepository @Inject constructor(
         )
 
         private fun paramsForLevel(levelId: Int): GenParams = when {
-            levelId <= 55  -> GenParams(colorCount = 5, tubeCount = 7,  shuffleDepth = 18)
-            levelId <= 65  -> GenParams(colorCount = 6, tubeCount = 8,  shuffleDepth = 22)
-            levelId <= 75  -> GenParams(colorCount = 7, tubeCount = 9,  shuffleDepth = 26)
-            levelId <= 85  -> GenParams(colorCount = 8, tubeCount = 10, shuffleDepth = 30)
-            levelId <= 95  -> GenParams(colorCount = 9, tubeCount = 11, shuffleDepth = 34)
-            else           -> GenParams(colorCount = 10, tubeCount = 12, shuffleDepth = 38)
+            levelId <= 55  -> GenParams(colorCount = 5, tubeCount = 7,  shuffleDepth = 15)
+            levelId <= 65  -> GenParams(colorCount = 5, tubeCount = 7,  shuffleDepth = 20)
+            levelId <= 75  -> GenParams(colorCount = 6, tubeCount = 8,  shuffleDepth = 22)
+            levelId <= 85  -> GenParams(colorCount = 7, tubeCount = 9,  shuffleDepth = 25)
+            levelId <= 95  -> GenParams(colorCount = 8, tubeCount = 10, shuffleDepth = 28)
+            else           -> GenParams(colorCount = 9, tubeCount = 11, shuffleDepth = 32)
         }
     }
 

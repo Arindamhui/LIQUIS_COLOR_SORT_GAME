@@ -334,14 +334,14 @@ class GameFragment : Fragment() {
 
     private fun onHintRequested() {
         viewModel.onHintRequested()
-        showRewardedAd()
     }
 
     private fun showRewardedAd() {
+        if (isStateSaved || !isAdded) return
         adManager.showRewarded(
             requireActivity(),
             onRewarded = { viewModel.grantHint() },
-            onDismissed = {}
+            onDismissed = { viewModel.onHintDismissed() }
         )
     }
 
@@ -350,6 +350,7 @@ class GameFragment : Fragment() {
     }
 
     private fun showNoInternetDialog() {
+        if (isStateSaved || !isAdded) return
         val existing = childFragmentManager.findFragmentByTag("NoInternetDialog")
         if (existing == null) {
             com.liquidcolorsort.ui.dialog.NoInternetDialogFragment()

@@ -27,10 +27,10 @@ class AdManager @Inject constructor(
 
     companion object {
         /** Show an interstitial after every N level completions. */
-        const val INTERSTITIAL_FREQUENCY = 3
+        const val INTERSTITIAL_FREQUENCY = 4
         
         /** Levels before which NO interstitials are displayed to protect D1 user retention. */
-        const val RETENTION_SAFE_LEVEL_THRESHOLD = 5
+        const val RETENTION_SAFE_LEVEL_THRESHOLD = 10
     }
 
     private var interstitialAd: InterstitialAd? = null

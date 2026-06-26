@@ -192,6 +192,13 @@ class GameViewModel @Inject constructor(
         }
     }
 
+    /** Called when the rewarded ad is dismissed or fails to show. */
+    fun onHintDismissed() {
+        if (_uiState.value is GameUiState.ShowingRewardedAd) {
+            _uiState.value = GameUiState.Playing
+        }
+    }
+
     fun onHintConsumed() { _hint.value = null }
 
     fun onRestartTapped() {

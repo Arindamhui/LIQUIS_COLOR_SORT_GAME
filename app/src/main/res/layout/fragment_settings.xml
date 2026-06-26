@@ -51,6 +51,48 @@
         app:layout_constraintBottom_toBottomOf="@id/tv_sound_label"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Music toggle -->
+    <TextView
+        android:id="@+id/tv_music_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/music"
+        android:textSize="16sp"
+        android:textColor="#DDFFFFFF"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_sound_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/switch_music" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_music"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/tv_music_label"
+        app:layout_constraintBottom_toBottomOf="@id/tv_music_label"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Vibration toggle -->
+    <TextView
+        android:id="@+id/tv_vibration_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/vibration"
+        android:textSize="16sp"
+        android:textColor="#DDFFFFFF"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_music_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/switch_vibration" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_vibration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/tv_vibration_label"
+        app:layout_constraintBottom_toBottomOf="@id/tv_vibration_label"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <!-- Remove ads button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_remove_ads"
@@ -60,8 +102,8 @@
         android:textColor="#FF0D1B2A"
         app:backgroundTint="#FFFFD700"
         app:cornerRadius="24dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_sound_label"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_vibration_label"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

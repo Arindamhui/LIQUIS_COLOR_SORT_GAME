@@ -27,6 +27,8 @@
 
     <string name="settings_title">Settings</string>
     <string name="sound_effects">Sound Effects</string>
+    <string name="music">Background Music</string>
+    <string name="vibration">Vibration &amp; Haptics</string>
     <string name="remove_ads">Remove Ads</string>
     <string name="version_info">v1.0.0 · Made with ❤</string>
 

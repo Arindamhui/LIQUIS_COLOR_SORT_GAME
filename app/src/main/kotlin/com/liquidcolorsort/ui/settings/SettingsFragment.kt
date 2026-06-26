@@ -36,6 +36,12 @@ class SettingsFragment : Fragment() {
         binding.switchSound.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setSoundEnabled(isChecked)
         }
+        binding.switchMusic.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.setMusicEnabled(isChecked)
+        }
+        binding.switchVibration.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.setVibrationEnabled(isChecked)
+        }
 
         binding.btnRemoveAds.setOnClickListener {
             // Stub — shows a toast until IAP is implemented
@@ -49,6 +55,16 @@ class SettingsFragment : Fragment() {
                 launch {
                     viewModel.soundEnabled.collect { enabled ->
                         binding.switchSound.isChecked = enabled
+                    }
+                }
+                launch {
+                    viewModel.musicEnabled.collect { enabled ->
+                        binding.switchMusic.isChecked = enabled
+                    }
+                }
+                launch {
+                    viewModel.vibrationEnabled.collect { enabled ->
+                        binding.switchVibration.isChecked = enabled
                     }
                 }
             }

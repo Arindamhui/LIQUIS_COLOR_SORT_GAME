@@ -185,6 +185,7 @@ class GameFragment : Fragment() {
                         view.performHapticFeedback(HapticFeedbackConstants.REJECT)
                     } else {
                         // Light select/deselect feedback
+                        soundManager.playTapSound()
                         view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                     }
                 }

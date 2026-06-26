@@ -22,6 +22,9 @@ class MainActivity : AppCompatActivity() {
     @javax.inject.Inject
     lateinit var adManager: com.liquidcolorsort.ads.AdService
 
+    @javax.inject.Inject
+    lateinit var musicPlayer: com.liquidcolorsort.audio.BackgroundMusicPlayer
+
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,5 +45,15 @@ class MainActivity : AppCompatActivity() {
         adManager.checkConsentAndInit(this) {
             // Initialisation complete
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        musicPlayer.onActivityResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        musicPlayer.onActivityPause()
     }
 }

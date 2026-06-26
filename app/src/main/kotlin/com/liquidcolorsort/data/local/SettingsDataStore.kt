@@ -30,6 +30,8 @@ class SettingsDataStore @Inject constructor(
 ) {
     companion object {
         private val KEY_SOUND_ENABLED    = booleanPreferencesKey("sound_enabled")
+        private val KEY_MUSIC_ENABLED    = booleanPreferencesKey("music_enabled")
+        private val KEY_VIBRATION_ENABLED = booleanPreferencesKey("vibration_enabled")
         private val KEY_ADS_REMOVED      = booleanPreferencesKey("ads_removed")
         private val KEY_TOTAL_MOVES      = longPreferencesKey("total_moves")
         private val KEY_LAST_PLAYED_LEVEL = intPreferencesKey("last_played_level")
@@ -38,6 +40,14 @@ class SettingsDataStore @Inject constructor(
     val soundEnabled: Flow<Boolean> = context.dataStore.data
         .catchIOException()
         .map { it[KEY_SOUND_ENABLED] ?: true }
+
+    val musicEnabled: Flow<Boolean> = context.dataStore.data
+        .catchIOException()
+        .map { it[KEY_MUSIC_ENABLED] ?: true }
+
+    val vibrationEnabled: Flow<Boolean> = context.dataStore.data
+        .catchIOException()
+        .map { it[KEY_VIBRATION_ENABLED] ?: true }
 
     val adsRemoved: Flow<Boolean> = context.dataStore.data
         .catchIOException()
@@ -53,6 +63,14 @@ class SettingsDataStore @Inject constructor(
 
     suspend fun setSoundEnabled(enabled: Boolean) {
         context.dataStore.edit { it[KEY_SOUND_ENABLED] = enabled }
+    }
+
+    suspend fun setMusicEnabled(enabled: Boolean) {
+        context.dataStore.edit { it[KEY_MUSIC_ENABLED] = enabled }
+    }
+
+    suspend fun setVibrationEnabled(enabled: Boolean) {
+        context.dataStore.edit { it[KEY_VIBRATION_ENABLED] = enabled }
     }
 
     suspend fun setAdsRemoved(removed: Boolean) {

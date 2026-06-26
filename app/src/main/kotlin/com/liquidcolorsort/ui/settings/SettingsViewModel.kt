@@ -18,7 +18,21 @@ class SettingsViewModel @Inject constructor(
     val soundEnabled: StateFlow<Boolean> = settingsRepo.soundEnabled
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), true)
 
+    val musicEnabled: StateFlow<Boolean> = settingsRepo.musicEnabled
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), true)
+
+    val vibrationEnabled: StateFlow<Boolean> = settingsRepo.vibrationEnabled
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), true)
+
     fun setSoundEnabled(enabled: Boolean) {
         viewModelScope.launch { settingsRepo.setSoundEnabled(enabled) }
+    }
+
+    fun setMusicEnabled(enabled: Boolean) {
+        viewModelScope.launch { settingsRepo.setMusicEnabled(enabled) }
+    }
+
+    fun setVibrationEnabled(enabled: Boolean) {
+        viewModelScope.launch { settingsRepo.setVibrationEnabled(enabled) }
     }
 }

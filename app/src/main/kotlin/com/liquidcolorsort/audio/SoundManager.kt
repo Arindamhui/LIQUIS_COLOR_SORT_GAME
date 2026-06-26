@@ -56,6 +56,14 @@ class SoundManager @Inject constructor(
         }
     }
 
+    /** Plays a short click/tap tone. */
+    fun playTapSound() {
+        if (!isSoundEnabled) return
+        scope.launch {
+            playTone(startFreq = 620f, endFreq = 620f, durationMs = 35)
+        }
+    }
+
     /** Plays a premium arpeggiated victory chord sweep. */
     fun playWinSound() {
         if (!isSoundEnabled) return

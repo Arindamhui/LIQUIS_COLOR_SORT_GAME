@@ -106,6 +106,15 @@ class TubeView @JvmOverloads constructor(
         strokeWidth = 6f
         color = Color.parseColor("#FF00FFAA")  // teal hint highlight
     }
+    private val patternPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.parseColor("#4DFFFFFF") // semi-transparent white
+        style = Paint.Style.STROKE
+        strokeWidth = 3f
+    }
+    private val patternFillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.parseColor("#4DFFFFFF")
+        style = Paint.Style.FILL
+    }
 
     // ── Color palette (IDs 1–12) ──────────────────────────────────────────
 
@@ -249,6 +258,68 @@ class TubeView @JvmOverloads constructor(
                 canvas.drawRoundRect(rect, cornerRadius - 2f, cornerRadius - 2f, liquidPaint)
             } else {
                 canvas.drawRect(rect, liquidPaint)
+            }
+
+            // Draw color-blind accessible patterns/symbols on top of the liquid segments
+            drawPatternForColor(canvas, color.id, rect)
+        }
+    }
+
+    private fun drawPatternForColor(canvas: Canvas, colorId: Int, rect: RectF) {
+        val cx = rect.centerX()
+        val cy = rect.centerY()
+        val r = min(rect.width(), rect.height()) * 0.15f
+
+        when (colorId) {
+            1 -> { // Dot
+                canvas.drawCircle(cx, cy, r * 0.8f, patternFillPaint)
+            }
+            2 -> { // Two horizontal dots
+                canvas.drawCircle(cx - r, cy, r * 0.6f, patternFillPaint)
+                canvas.drawCircle(cx + r, cy, r * 0.6f, patternFillPaint)
+            }
+            3 -> { // Slash
+                canvas.drawLine(cx - r, cy + r, cx + r, cy - r, patternPaint)
+            }
+            4 -> { // Cross
+                canvas.drawLine(cx - r, cy, cx + r, cy, patternPaint)
+                canvas.drawLine(cx, cy - r, cx, cy + r, patternPaint)
+            }
+            5 -> { // Three dots
+                canvas.drawCircle(cx, cy - r * 0.7f, r * 0.5f, patternFillPaint)
+                canvas.drawCircle(cx - r, cy + r * 0.5f, r * 0.5f, patternFillPaint)
+                canvas.drawCircle(cx + r, cy + r * 0.5f, r * 0.5f, patternFillPaint)
+            }
+            6 -> { // Horizontal line
+                canvas.drawLine(cx - r * 1.2f, cy, cx + r * 1.2f, cy, patternPaint)
+            }
+            7 -> { // Vertical line
+                canvas.drawLine(cx, cy - r * 1.2f, cx, cy + r * 1.2f, patternPaint)
+            }
+            8 -> { // Square outline
+                canvas.drawRect(cx - r, cy - r, cx + r, cy + r, patternPaint)
+            }
+            9 -> { // X
+                canvas.drawLine(cx - r, cy - r, cx + r, cy + r, patternPaint)
+                canvas.drawLine(cx - r, cy + r, cx + r, cy - r, patternPaint)
+            }
+            10 -> { // Diamond
+                val path = Path().apply {
+                    moveTo(cx, cy - r * 1.2f)
+                    lineTo(cx + r * 1.2f, cy)
+                    lineTo(cx, cy + r * 1.2f)
+                    lineTo(cx - r * 1.2f, cy)
+                    close()
+                }
+                canvas.drawPath(path, patternPaint)
+            }
+            11 -> { // Circle outline
+                canvas.drawCircle(cx, cy, r, patternPaint)
+            }
+            12 -> { // Wavy style line
+                canvas.drawLine(cx - r, cy - r * 0.5f, cx - r * 0.5f, cy + r * 0.5f, patternPaint)
+                canvas.drawLine(cx - r * 0.5f, cy + r * 0.5f, cx + r * 0.5f, cy - r * 0.5f, patternPaint)
+                canvas.drawLine(cx + r * 0.5f, cy - r * 0.5f, cx + r, cy + r * 0.5f, patternPaint)
             }
         }
     }
